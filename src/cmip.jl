@@ -166,11 +166,11 @@ fid = open("results_"*string(now())*".txt","w");
     mean(chns[:DeltaCant]), std(chns[:DeltaCant]), mean(chns[:DeltaCnat]), std(chns[:DeltaCnat]));
     @printf(fid,"                                σ(δant) = %6.3f ± %6.3f \n",          
     mean(chns[:sigXMa]), std(chns[:sigXMa]));
-    @printf(fid,"                                σ(δant) = %6.3f ± %6.3f \n",          
+    @printf(fid,"                                σ(δnat) = %6.3f ± %6.3f \n",          
     mean(chns[:sigXMn]), std(chns[:sigXMn]));
-    @printf(fid,"                                σ(δant) = %6.3f ± %6.3f \n",          
+    @printf(fid,"                                τ(ϵant) = %6.3f ± %6.3f \n",          
     mean(chns[:sigSMa]), std(chns[:sigSMa])); 
-    @printf(fid,"                                σ(δant) = %6.3f ± %6.3f \n",          
+    @printf(fid,"                                τ(ϵnat) = %6.3f ± %6.3f \n",          
     mean(chns[:sigSMn]), std(chns[:sigSMn]));
 
 for i in 1:21
