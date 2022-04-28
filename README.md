@@ -1,5 +1,9 @@
 # Bayesian-Hierarchical-Model-for-the-CMIP5-6-anthropogenic-C-uptake
 
+See 
+"Evaluation ofthe CMIPmodels withtheInternational Ocean Model Benchmarktool: Rates of contemporary ocean carbon uptake linked with vertical temperature gradients and transport to the ocean interior" by Fu, Moore, Primeau, Collier, Oluwaseum, Ogunro, Hoffman, and Randerson"
+
+
 ![image](https://user-images.githubusercontent.com/7294603/165800464-96b582ba-39ba-45a1-976f-dd8d3656982d.png)
 ![bias_cdf](https://user-images.githubusercontent.com/7294603/165798190-e5fe2ed0-9ab3-45b7-a4ee-6d68db033869.png)
 
