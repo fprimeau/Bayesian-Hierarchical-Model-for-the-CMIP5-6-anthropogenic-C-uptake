@@ -166,11 +166,19 @@ fid = open("results_"*string(now())*".txt","w");
     mean(chns[:DeltaCant]), std(chns[:DeltaCant]), mean(chns[:DeltaCnat]), std(chns[:DeltaCnat]));
     @printf(fid,"                                σ(δant) = %6.3f ± %6.3f \n",          
     mean(chns[:sigXMa]), std(chns[:sigXMa]));
+<<<<<<< HEAD
     @printf(fid,"                                σ(δnat) = %6.3f ± %6.3f \n",          
     mean(chns[:sigXMn]), std(chns[:sigXMn]));
     @printf(fid,"                                τ(ϵant) = %6.3f ± %6.3f \n",          
     mean(chns[:sigSMa]), std(chns[:sigSMa])); 
     @printf(fid,"                                τ(ϵnat) = %6.3f ± %6.3f \n",          
+=======
+    @printf(fid,"                                σ(δant) = %6.3f ± %6.3f \n",          
+    mean(chns[:sigXMn]), std(chns[:sigXMn]));
+    @printf(fid,"                                σ(δant) = %6.3f ± %6.3f \n",          
+    mean(chns[:sigSMa]), std(chns[:sigSMa])); 
+    @printf(fid,"                                σ(δant) = %6.3f ± %6.3f \n",          
+>>>>>>> 68edbe80cb1cc1086358370e11cb889f05801b2c
     mean(chns[:sigSMn]), std(chns[:sigSMn]));
 
 for i in 1:21
@@ -228,3 +236,4 @@ p2 = plot!([-30,-10,0], [ cdf[iz], cdf[iz], cdf[iz] ], lw = 1, linestyle = :dash
 
 display(p1)
 display(p2)
+
