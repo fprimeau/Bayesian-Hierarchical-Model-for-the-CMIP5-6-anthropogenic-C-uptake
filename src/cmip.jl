@@ -135,7 +135,7 @@ isdir(tmpdir) &&  rm(tmpdir; recursive=true)
 
 sm = SampleModel("cmip", cmipmod, [4]; tmpdir = tmpdir )
 #sm.method = StanSample.Sample(15000, 15000, false, 1, StanSample.Adapt(true, 0.05, 0.8, 0.75, 10.0, 75, 50, 25), StanSample.Hmc(StanSample.Nuts(10), StanSample.diag_e(), 1.0, 1.0))
-sm.method = StanSample.Sample(num_samples=200000)
+sm.method = StanSample.Sample(num_samples=20000)
 rc = stan_sample(sm; data = cmipData)
 
 
@@ -152,14 +152,38 @@ m3 = [ fill(NaN,21-4,1); cmipData["d4"]];
 m4 = [ mean(repeat(chns[:DeltaCant]',5)+chns[:dX1a_a],dims=2); mean(repeat(chns[:DeltaCant]',6)+chns[:dX1a_b],dims=2); mean(repeat(chns[:DeltaCant]',2)+chns[:dX2a_a],dims=2); mean(repeat(chns[:DeltaCant]',4)+chns[:dX2a_b],dims=2); mean(repeat(chns[:DeltaCant]',4)+chns[:dX3a],dims=2)]; 
 m5 = [ mean(repeat(chns[:DeltaCnat]',5)+chns[:dX1n_a],dims=2); mean(repeat(chns[:DeltaCnat]',6)+chns[:dX1n_b],dims=2); mean(repeat(chns[:DeltaCnat]',2)+chns[:dX2n_a],dims=2); mean(repeat(chns[:DeltaCnat]',4)+chns[:dX2n_b],dims=2); mean(repeat(chns[:DeltaCnat]',4)+chns[:dX4n],dims=2)];
 M = [m1 m2 m3 m4 m5];
-s1 = [ fill(NaN,5,1); cmipData["sig1b"]; fill(NaN,2,1); cmipData["sig2b"]; fill(NaN,4,1)  ];
+s1 = [ fill(NaN,5,1); cmipData["sig1b"]; fill(NaN,2,1); cmipData["sig2b"]; sqrt.(cmipData["sig3"].^2+cmipData["sig4"].^2) ];
 s2 = [ fill(NaN,21-4,1); cmipData["sig3"]];
 s3 = [ fill(NaN,21-4,1); cmipData["sig4"]];
 s4 = [ std(repeat(chns[:DeltaCant]',5)+chns[:dX1a_a],dims=2); std(repeat(chns[:DeltaCant]',6)+chns[:dX1a_b],dims=2); std(repeat(chns[:DeltaCant]',2)+chns[:dX2a_a],dims=2); std(repeat(chns[:DeltaCant]',4)+chns[:dX2a_b],dims=2); std(repeat(chns[:DeltaCant]',4)+chns[:dX3a],dims=2)]; 
 s5 = [ std(repeat(chns[:DeltaCnat]',5)+chns[:dX1n_a],dims=2); std(repeat(chns[:DeltaCnat]',6)+chns[:dX1n_b],dims=2); std(repeat(chns[:DeltaCnat]',2)+chns[:dX2n_a],dims=2); std(repeat(chns[:DeltaCnat]',4)+chns[:dX2n_b],dims=2); std(repeat(chns[:DeltaCnat]',4)+chns[:dX4n],dims=2)];
 S = [s1 s2 s3 s4 s5];
 
-fid = open("results_"*string(now())*".txt","w");
+cmip5_cant = [ repeat(chns[:DeltaCant]',5)+chns[:dX1a_a];repeat(chns[:DeltaCant]',6)]; 
+mean_cmip5_cant = mean(cmip5_cant[:]);
+std_cmip5_cant = std(cmip5_cant[:]);
+
+cmip6_cant = [ repeat(chns[:DeltaCant]',2)+chns[:dX2a_a]; repeat(chns[:DeltaCant]',4)+chns[:dX2a_b]; repeat(chns[:DeltaCant]',4)+chns[:dX3a]]; 
+mean_cmip6_cant = mean(cmip6_cant[:]);
+std_cmip6_cant = std(cmip6_cant[:]);
+
+cmip5_cnat = [ repeat(chns[:DeltaCnat]',5)+chns[:dX1n_a];repeat(chns[:DeltaCnat]',6)]; 
+mean_cmip5_cnat = mean(cmip5_cnat[:]);
+std_cmip5_cnat = std(cmip5_cnat[:]);
+
+cmip6_cnat = [ repeat(chns[:DeltaCnat]',2)+chns[:dX2n_a]; repeat(chns[:DeltaCnat]',4)+chns[:dX2n_b]; repeat(chns[:DeltaCnat]',4)+chns[:dX4n]]; 
+mean_cmip6_cnat = mean(cmip6_cnat[:]);
+std_cmip6_cnat = std(cmip6_cnat[:]);
+
+cmip5_total = cmip5_cant+cmip5_cnat;
+mean_cmip5_total = mean(cmip5_total[:]);
+std_cmip5_total = std(cmip5_total[:]);
+
+cmip6_total = cmip6_cant+cmip6_cnat;
+mean_cmip6_total = mean(cmip6_total[:]);
+std_cmip6_total = std(cmip6_total[:]);
+
+fid = open(ProjDir*"/results_"*string(now())*".txt","w");
 @printf(fid,"         Bayesian Hierarchical Model of the Carbon Storage in  CMIP5 and CMIP6  ESMs\n");
 @printf(fid,"      _________________________________________________________________________________\n\n");
 @printf(fid,"                                 ΔCant  = %6.3f ± %6.3f  \n                                 ΔCnat  = %6.3f ± %6.3f \n", 
@@ -172,6 +196,13 @@ fid = open("results_"*string(now())*".txt","w");
     mean(chns[:sigSMa]), std(chns[:sigSMa])); 
     @printf(fid,"                                τ(ϵnat) = %6.3f ± %6.3f \n",          
     mean(chns[:sigSMn]), std(chns[:sigSMn]));
+    @printf(fid,"                                 ΔCant(CMIP5)  = %6.3f ± %6.3f  \n",mean_cmip5_cant,std_cmip5_cant);
+    @printf(fid,"                                 ΔCant(CMIP6)  = %6.3f ± %6.3f  \n",mean_cmip6_cant,std_cmip6_cant);
+    @printf(fid,"                                 ΔCnat(CMIP5)  = %6.3f ± %6.3f  \n",mean_cmip5_cnat,std_cmip5_cnat);
+    @printf(fid,"                                 ΔCnat(CMIP6)  = %6.3f ± %6.3f  \n",mean_cmip6_cnat,std_cmip6_cnat);
+    @printf(fid,"                                 ΔCtot(CMIP5)  = %6.3f ± %6.3f  \n",mean_cmip5_total,std_cmip5_total);
+    @printf(fid,"                                 ΔCtot(CMIP6)  = %6.3f ± %6.3f  \n",mean_cmip6_total,std_cmip6_total);
+    
 
 for i in 1:21
     if i == 1
